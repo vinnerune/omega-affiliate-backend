@@ -1,0 +1,34 @@
+# Render Blueprint for the OMEGA Tweaks affiliate backend.
+# Deploys on the FREE plan as-is. See the README for the (recommended)
+# paid upgrade that makes the database survive restarts/redeploys.
+services:
+  - type: web
+    name: omega-affiliate-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: SITE_ORIGIN
+        sync: false      # set to your real site, e.g. https://omegatweaks.com
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false      # the admin login code, e.g. Messi1987
+      - key: COMMISSION_RATE
+        value: "0.25"
+      - key: SECURE_COOKIES
+        value: "true"
+
+# ── PERSISTENCE (recommended before real launch) ───────────────────────────
+# The free plan's disk is wiped on every deploy/restart, so affiliate data
+# would reset. To keep data permanently, upgrade this service to the "Starter"
+# plan ($7/mo) and add a disk, then point the DB at it:
+#   1. plan: starter
+#   2. add under the service:
+#        disk:
+#          name: affiliate-data
+#          mountPath: /data
+#          sizeGB: 1
+#   3. add env var:  DB_PATH = /data/affiliate.db
+# (Or keep it free for testing and accept that data can reset.)
