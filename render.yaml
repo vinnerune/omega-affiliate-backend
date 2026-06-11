@@ -1,0 +1,21 @@
+# Render Blueprint for the OMEGA Tweaks affiliate backend.
+# Storage is now PostgreSQL (Supabase) via DATABASE_URL — no disk needed,
+# and data is permanent across restarts/redeploys even on the free plan.
+services:
+  - type: web
+    name: omega-affiliate-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false      # your Supabase connection string (Settings → Database → Connection string → URI)
+      - key: SITE_ORIGIN
+        sync: false      # set to your real site, e.g. https://omegatweaks.com
+      - key: ADMIN_TOKEN
+        sync: false      # MUST match the license webhook's ADMIN_TOKEN
+      - key: ADMIN_PASSWORD
+        sync: false      # the admin login code, e.g. Messi1987
+      - key: COMMISSION_RATE
+        value: "0.25"
